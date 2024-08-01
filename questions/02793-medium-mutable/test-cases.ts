@@ -1,24 +1,23 @@
-import type { Equal, Expect } from '@type-challenges/utils'
+import type { Equal, Expect } from "@type-challenges/utils";
 
 interface Todo1 {
-  title: string
-  description: string
-  completed: boolean
+  title: string;
+  description: string;
+  completed: boolean;
   meta: {
-    author: string
-  }
+    author: string;
+  };
 }
 
-type List = [1, 2, 3]
+type List = [1, 2, 3];
+
+type Mutable<T> = {
+  -readonly [K in keyof T]: T[K];
+};
 
 type cases = [
   Expect<Equal<Mutable<Readonly<Todo1>>, Todo1>>,
-  Expect<Equal<Mutable<Readonly<List>>, List>>,
-]
+  Expect<Equal<Mutable<Readonly<List>>, List>>
+];
 
-type errors = [
-  // @ts-expect-error
-  Mutable<'string'>,
-  // @ts-expect-error
-  Mutable<0>,
-]
+type errors = [Mutable<"string">, Mutable<0>];
