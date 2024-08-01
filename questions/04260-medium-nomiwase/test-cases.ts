@@ -1,18 +1,26 @@
 import type { Equal, Expect } from "@type-challenges/utils";
 
+// type AllCombinations<
+//   S extends string,
+//   U extends string = ""
+// > = S extends `${infer F}${infer Rest}`
+//   ? AllCombinations<Rest, U extends U ? F | U | `${F}${U}` | `${U}${F}` : U>
+//   : U;
+
+type StringToUnion<S> = S extends `${infer F}${infer R}`
+  ? F | StringToUnion<R>
+  : S;
 type AllCombinations<
   S extends string,
-  U extends string = ""
-> = S extends `${infer F}${infer Rest}`
-  ? AllCombinations<Rest, U extends U ? F | U | `${F}${U}` | `${U}${F}` : U>
-  : U;
+  T extends string = StringToUnion<S>,
+  U extends string = T
+> = S extends `${string}${infer R}`
+  ? U extends U
+    ? `${U}${AllCombinations<R, U extends "" ? T : Exclude<T, U>>}`
+    : never
+  : "";
 
-function dfs(str: string, res = [""]) {
-  for (const ch of str) {
-  }
-}
-
-type test = AllCombinations<"ABC">;
+type test = AllCombinations<"ACC">;
 
 type cases = [
   Expect<Equal<AllCombinations<"">, "">>,
